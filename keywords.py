@@ -2,7 +2,6 @@ from html.parser import HTMLParser
 from urllib import request
 from bs4 import BeautifulSoup
 
-url = 'https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93286' #此处为待爬链接
 
 def spider(income = str):
     response = request.urlopen(income)
@@ -23,12 +22,17 @@ def write_file(income1 = str,income2 = str):
     file.write(income2 + '\n')
     file.close()
 
+f = open("income.txt", "r")
+list = f.read().splitlines()
+f.close()
 
 
+for bug_number in list:
+    url = 'https://gcc.gnu.org/bugzilla/show_bug.cgi?id=' + bug_number
+    keyword = spider(url)
+    number = url.split('=')[1].split('\'')[0]  # 过滤出原本链接中的bug编号
+    print(number)
+    print(keyword)
+    write_file(number, keyword)
 
-keyword = spider(url)
-number = url.split('=')[1].split('\'')[0]  # 过滤出原本链接中的bug编号
-print(number)
-print(keyword)
-write_file(number,keyword)
 
